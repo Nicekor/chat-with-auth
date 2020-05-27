@@ -1,0 +1,13 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.sunIcon {
+  width: 2em;
+}
+
+.moonIcon {
+  width: 3em;
+}
