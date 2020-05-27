@@ -9,7 +9,7 @@ import Switch from '@material-ui/core/Switch';
 const Header = ({ darkMode, setDarkMode }) => {
   return (
     <header className={classes.header}>
-      <img src={sunIcon} className={classes.sunIcon} />
+      <img src={sunIcon} alt="Sun Icon" className={classes.sunIcon} />
       <Switch
         color="secondary"
         checked={darkMode}
