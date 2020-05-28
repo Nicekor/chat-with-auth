@@ -1,12 +1,28 @@
 import React from 'react';
 
-import classes from './Header.module.css';
 import sunIcon from '../../assets/img/sun-icon.png';
 import moonIcon from '../../assets/img/moon-icon.png';
 
-import Switch from '@material-ui/core/Switch';
+import { makeStyles, Switch } from '@material-ui/core';
+
+const useStyles = makeStyles((theme) => {
+  return {
+    header: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'flex-end',
+    },
+    sunIcon: {
+      width: '2em',
+    },
+    moonIcon: {
+      width: '3em',
+    },
+  };
+});
 
 const Header = ({ darkMode, setDarkMode }) => {
+  const classes = useStyles();
   return (
     <header className={classes.header}>
       <img src={sunIcon} alt="Sun Icon" className={classes.sunIcon} />
