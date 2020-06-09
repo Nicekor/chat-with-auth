@@ -4,6 +4,7 @@ import { MuiThemeProvider, CssBaseline } from '@material-ui/core';
 import { getThemes } from './utils/colorThemes';
 
 import Header from './components/Header/Header';
+import LoginForm from './components/LogInForm/LogInForm';
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -14,6 +15,7 @@ function App() {
     <MuiThemeProvider theme={darkMode ? darkTheme : lightTheme}>
       <CssBaseline />
       <Header darkMode={darkMode} setDarkMode={setDarkMode} />
+      <LoginForm />
     </MuiThemeProvider>
   );
 }
