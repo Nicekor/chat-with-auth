@@ -3,7 +3,7 @@ import React from 'react';
 import sunIcon from '../../assets/img/sun-icon.png';
 import moonIcon from '../../assets/img/moon-icon.png';
 
-import { makeStyles, Switch } from '@material-ui/core';
+import { makeStyles, Switch, Box } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -18,6 +18,10 @@ const useStyles = makeStyles((theme) => {
     moonIcon: {
       width: '3em',
     },
+    themeSwitch: {
+      display: 'flex',
+      alignItems: 'center',
+    },
   };
 });
 
@@ -25,13 +29,15 @@ const Header = ({ darkMode, setDarkMode }) => {
   const classes = useStyles();
   return (
     <header className={classes.header}>
-      <img src={sunIcon} alt="Sun Icon" className={classes.sunIcon} />
-      <Switch
-        color="secondary"
-        checked={darkMode}
-        onChange={() => setDarkMode(!darkMode)}
-      />
-      <img src={moonIcon} alt="Moon Icon" className={classes.moonIcon} />
+      <Box className={classes.themeSwitch}>
+        <img src={sunIcon} alt="Sun Icon" className={classes.sunIcon} />
+        <Switch
+          color="primary"
+          checked={darkMode}
+          onChange={() => setDarkMode(!darkMode)}
+        />
+        <img src={moonIcon} alt="Moon Icon" className={classes.moonIcon} />
+      </Box>
     </header>
   );
 };
