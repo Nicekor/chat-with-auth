@@ -4,16 +4,20 @@ const getThemes = () => {
   const darkTheme = createMuiTheme({
     palette: {
       primary: {
-        main: '#1F2833',
+        main: '#eeeeee',
       },
       secondary: {
-        main: '#6F2232',
+        main: '#4ecca3',
       },
       background: {
-        default: '#1A1A1D',
+        default: '#232931',
+        paper: '#393e46',
       },
       error: {
         main: '#e43f5a',
+      },
+      text: {
+        primary: '#fff'
       },
     },
   });
@@ -28,10 +32,13 @@ const getThemes = () => {
       background: {
         default: '#f1e3f3',
       },
+      text: {
+        primary: '#9e97c9',
+      },
     },
   });
 
   return [darkTheme, lightTheme];
 };
 
-export {getThemes};
+export { getThemes };
