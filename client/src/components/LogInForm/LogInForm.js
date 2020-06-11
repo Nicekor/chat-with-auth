@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import {
   FormControl,
@@ -13,6 +13,8 @@ import {
   Box,
   Divider,
 } from '@material-ui/core';
+import useForm from '../../hooks/useForm';
+import validate from '../../validation/loginFormValidation';
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -52,61 +54,19 @@ const useStyles = makeStyles((theme) => {
 const LogInForm = () => {
   const minWidth768 = useMediaQuery('(min-width:768px)');
   const classes = useStyles();
-
-  const [email, setEmail] = useState('');
-  const [isEmailInvalid, setIsEmailInvalid] = useState(false);
-  const [emailHelperText, setEmailHelperText] = useState(
-    "We'll never share your email."
+  const { handleFormChange, handleFormSubmit, errors } = useForm(
+    onFormSubmit,
+    validate
   );
-  const [password, setPassword] = useState('');
-  const [emptyPassword, setEmptyPassword] = useState(false);
 
-  const isValidEmail = (email) =>
-    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
-      email
-    );
-
-  const validateEmail = () => {
-    if (!email) {
-      setIsEmailInvalid(true);
-      setEmailHelperText('This is a required field.');
-    } else if (!isValidEmail(email)) {
-      setIsEmailInvalid(true);
-      setEmailHelperText('Not a well formed email address');
-    } else {
-      setIsEmailInvalid(false);
-      setEmailHelperText("We'll never share your email.");
-    }
-  };
-
-  const validatePassword = () => {
-    if (!password) {
-      setEmptyPassword(true);
-    } else {
-      setEmptyPassword(false);
-    }
-  };
-
-  const onLogInSubmit = (e) => {
-    e.preventDefault();
-    validateEmail();
-    validatePassword();
-  };
-
-  const onEmailChange = ({ target: { value } }) => {
-    setEmail(value);
-  };
-
-  const onPasswordChange = ({ target: { value } }) => {
-    setPassword(value);
-  };
-
-  const onRegisterOption = () => {};
+  function onFormSubmit() {
+    console.log('Successfully logged in');
+  }
 
   return (
     <Box className={classes.wrapper}>
       <form
-        onSubmit={onLogInSubmit}
+        onSubmit={handleFormSubmit}
         noValidate
         autoComplete="off"
         className={classes.logInForm}
@@ -114,7 +74,7 @@ const LogInForm = () => {
       >
         <FormControl
           required
-          error={isEmailInvalid}
+          error={!!errors.email}
           color="primary"
           className={classes.formControl}
         >
@@ -124,8 +84,9 @@ const LogInForm = () => {
           <Input
             id="email"
             type="email"
+            name="email"
+            onChange={handleFormChange}
             autoFocus
-            onChange={onEmailChange}
             aria-describedby="email-helper-text"
             className={classes.input}
           />
@@ -133,12 +94,12 @@ const LogInForm = () => {
             id="email-helper-text"
             className={classes.formHelperText}
           >
-            {emailHelperText}
+            {errors.email || "We'll never share your email"}
           </FormHelperText>
         </FormControl>
         <FormControl
           required
-          error={emptyPassword}
+          error={!!errors.password}
           color="primary"
           className={classes.formControl}
         >
@@ -148,7 +109,8 @@ const LogInForm = () => {
           <Input
             id="password"
             type="password"
-            onChange={onPasswordChange}
+            name="password"
+            onChange={handleFormChange}
             aria-describedby="password-helper-text"
             className={classes.input}
           />
@@ -156,9 +118,7 @@ const LogInForm = () => {
             id="password-helper-text"
             className={classes.formHelperText}
           >
-            {emptyPassword
-              ? 'This is a required field'
-              : 'Do not share your password.'}
+            {errors.password || "We'll never share your password"}
           </FormHelperText>
         </FormControl>
         <Link
@@ -183,7 +143,6 @@ const LogInForm = () => {
             variant="caption"
             component="button"
             color="textPrimary"
-            onClick={onRegisterOption}
             type="button"
           >
             Register
