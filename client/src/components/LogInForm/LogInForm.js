@@ -1,5 +1,4 @@
-import React from 'react';
-
+import React, { useState } from 'react';
 import {
   FormControl,
   InputLabel,
@@ -12,9 +11,16 @@ import {
   Typography,
   Box,
   Divider,
+  InputAdornment,
+  IconButton,
 } from '@material-ui/core';
+import { AlternateEmail, Visibility, VisibilityOff } from '@material-ui/icons';
+// import { Link as RouterLink } from 'react-router-dom';
+
 import useForm from '../../hooks/useForm';
 import validate from '../../validation/loginFormValidation';
+
+import EnterNickname from '../EnterNickname/EnterNickname';
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -31,19 +37,19 @@ const useStyles = makeStyles((theme) => {
       display: 'flex',
       margin: 'auto',
       backgroundColor: theme.palette.background.paper,
-      borderRadius: '1em',
-      padding: '1em',
+      borderRadius: theme.spacing(2),
+      padding: theme.spacing(2),
     },
     logInForm: {
-      margin: 'auto 1em',
+      margin: theme.spacing('auto', 2),
       display: 'flex',
       flexDirection: 'column',
     },
     formControl: {
-      marginBottom: '1em',
+      marginBottom: theme.spacing(2),
     },
     loginBtn: {
-      margin: '1em 0',
+      margin: theme.spacing(2, 0),
     },
     forgotPassword: {
       alignSelf: 'flex-start',
@@ -58,11 +64,26 @@ const LogInForm = () => {
     onFormSubmit,
     validate
   );
+  const [showPassword, setShowPassword] = useState(false);
+  const [noAuthLogin, setNoAuthLogin] = useState(false);
 
   function onFormSubmit() {
     console.log('Successfully logged in');
   }
 
+  const onEnterWithNoAccount = () => {
+    setNoAuthLogin(true);
+  };
+
+  const handleMouseDownPassword = () => {
+    setShowPassword(!showPassword);
+  };
+  const handleClickShowPassword = (e) => {
+    e.preventDefault();
+  };
+
+  if (noAuthLogin) return <EnterNickname />;
+  // todo: refactor all Input to TextField
   return (
     <Box className={classes.wrapper}>
       <form
@@ -89,12 +110,17 @@ const LogInForm = () => {
             autoFocus
             aria-describedby="email-helper-text"
             className={classes.input}
+            endAdornment={
+              <InputAdornment position="end">
+                <AlternateEmail color="action" />
+              </InputAdornment>
+            }
           />
           <FormHelperText
             id="email-helper-text"
             className={classes.formHelperText}
           >
-            {errors.email || "We'll never share your email"}
+            {errors.email || "We'll never share your email."}
           </FormHelperText>
         </FormControl>
         <FormControl
@@ -108,17 +134,29 @@ const LogInForm = () => {
           </InputLabel>
           <Input
             id="password"
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             name="password"
             onChange={handleFormChange}
             aria-describedby="password-helper-text"
             className={classes.input}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            }
           />
           <FormHelperText
             id="password-helper-text"
             className={classes.formHelperText}
           >
-            {errors.password || "We'll never share your password"}
+            {errors.password || "We'll never share your password."}
           </FormHelperText>
         </FormControl>
         <Link
@@ -136,7 +174,9 @@ const LogInForm = () => {
         <Typography variant="body2" align="center" color="textPrimary">
           OR
         </Typography>
-        <Button color="primary">Enter without an account</Button>
+        <Button color="primary" onClick={onEnterWithNoAccount}>
+          Enter without an account
+        </Button>
         <FormHelperText className={classes.formHelperText}>
           Need an account?{' '}
           <Link
