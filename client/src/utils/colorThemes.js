@@ -17,7 +17,7 @@ const getThemes = () => {
         main: '#e43f5a',
       },
       text: {
-        primary: '#fff'
+        primary: '#fff',
       },
     },
   });
