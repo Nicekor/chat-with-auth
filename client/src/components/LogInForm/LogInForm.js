@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   FormControl,
   InputLabel,
@@ -15,12 +15,10 @@ import {
   IconButton,
 } from '@material-ui/core';
 import { AlternateEmail, Visibility, VisibilityOff } from '@material-ui/icons';
-// import { Link as RouterLink } from 'react-router-dom';
-
 import useForm from '../../hooks/useForm';
 import validate from '../../validation/loginFormValidation';
-
-import EnterNickname from '../EnterNickname/EnterNickname';
+import { AuthContext } from '../../context/Auth';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -65,14 +63,16 @@ const LogInForm = () => {
     validate
   );
   const [showPassword, setShowPassword] = useState(false);
-  const [noAuthLogin, setNoAuthLogin] = useState(false);
+  const { authenticate } = useContext(AuthContext);
+  const history = useHistory();
 
   function onFormSubmit() {
     console.log('Successfully logged in');
   }
 
   const onEnterWithNoAccount = () => {
-    setNoAuthLogin(true);
+    authenticate();
+    history.push('/nickname');
   };
 
   const handleMouseDownPassword = () => {
@@ -82,8 +82,6 @@ const LogInForm = () => {
     e.preventDefault();
   };
 
-  if (noAuthLogin) return <EnterNickname />;
-  // todo: refactor all Input to TextField
   return (
     <Box className={classes.wrapper}>
       <form

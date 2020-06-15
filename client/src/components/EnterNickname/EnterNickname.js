@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
-  Box,
   TextField,
   makeStyles,
   Button,
   InputAdornment,
 } from '@material-ui/core';
 import { EditOutlined } from '@material-ui/icons';
+import { useHistory } from 'react-router-dom';
+import { AuthContext } from '../../context/Auth';
+import useForm from '../../hooks/useForm';
+import validate from '../../validation/nicknameValidation';
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -24,13 +27,36 @@ const useStyles = makeStyles((theme) => {
 
 const EnterNickname = () => {
   const classes = useStyles();
+  const history = useHistory();
+  const { authenticate } = useContext(AuthContext);
+  const { values, handleFormSubmit, handleFormChange, errors } = useForm(
+    openChat,
+    validate
+  );
+
+  function openChat() {
+    authenticate();
+    history.push({
+      pathname: '/chat',
+      state: values.nickname,
+    });
+  }
+
   return (
-    <Box className={classes.nicknameWrapper}>
+    <form
+      noValidate
+      className={classes.nicknameWrapper}
+      onSubmit={handleFormSubmit}
+    >
       <TextField
-        variant="filled"
+        required
+        error={!!errors.nickname}
+        helperText={errors.nickname}
         label="Nickname"
         color="primary"
+        name="nickname"
         className={classes.nickname}
+        onChange={handleFormChange}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
@@ -39,10 +65,10 @@ const EnterNickname = () => {
           ),
         }}
       />
-      <Button variant="contained" color="primary">
+      <Button type="submit" variant="contained" color="primary">
         LET'S GO
       </Button>
-    </Box>
+    </form>
   );
 };
 
