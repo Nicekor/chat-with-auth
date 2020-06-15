@@ -4,7 +4,7 @@ const isValidEmail = (email) =>
   );
 
 const validate = ({ email, password }) => {
-  let errors = {};
+  const errors = {};
   if (!email) {
     errors.email = 'Email address is required';
   } else if (!isValidEmail(email)) {
