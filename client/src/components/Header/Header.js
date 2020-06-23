@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme) => {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'flex-end',
+      maxHeight: theme.measures.headerMaxHeight,
     },
     sunIcon: {
       width: '2em',
