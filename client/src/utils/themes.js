@@ -18,7 +18,11 @@ const getThemes = () => {
       },
       text: {
         primary: '#fff',
+        secondary: '#eeeeee',
       },
+    },
+    measures: {
+      headerMaxHeight: '6vh',
     },
   });
   const lightTheme = createMuiTheme({
@@ -35,6 +39,9 @@ const getThemes = () => {
       text: {
         primary: '#9e97c9',
       },
+    },
+    measures: {
+      headerMaxHeight: '6vh',
     },
   });
 

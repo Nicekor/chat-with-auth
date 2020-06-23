@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { MuiThemeProvider, CssBaseline } from '@material-ui/core';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { getThemes } from './utils/colorThemes';
+import { getThemes } from './utils/themes';
 
 import Header from './components/Header/Header';
 import LoginForm from './components/LogInForm/LogInForm';
@@ -17,11 +17,11 @@ function App() {
   const [darkTheme, lightTheme] = getThemes();
 
   return (
-    <AuthProvider>
-      <MuiThemeProvider theme={darkMode ? darkTheme : lightTheme}>
-        <CssBaseline />
-        <BrowserRouter>
-          <Header darkMode={darkMode} setDarkMode={setDarkMode} />
+    <MuiThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+      <CssBaseline />
+      <BrowserRouter>
+        <Header darkMode={darkMode} setDarkMode={setDarkMode} />
+        <AuthProvider>
           <Switch>
             <Route path="/" exact component={LoginForm} />
             <PrivateRoute path="/nickname">
@@ -32,9 +32,9 @@ function App() {
             </PrivateRoute>
             <Route path="*" component={NotFound} />
           </Switch>
-        </BrowserRouter>
-      </MuiThemeProvider>
-    </AuthProvider>
+        </AuthProvider>
+      </BrowserRouter>
+    </MuiThemeProvider>
   );
 }
 
