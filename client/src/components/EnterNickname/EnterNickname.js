@@ -49,6 +49,7 @@ const EnterNickname = () => {
       onSubmit={handleFormSubmit}
     >
       <TextField
+        autoFocus
         required
         error={!!errors.nickname}
         helperText={errors.nickname}
