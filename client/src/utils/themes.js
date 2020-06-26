@@ -20,6 +20,8 @@ const getThemes = () => {
         primary: '#fff',
         secondary: '#eeeeee',
       },
+      scrollbar: '#3E4042',
+      scrollThumb: '#1C1E21',
     },
     measures: {
       headerMaxHeight: '6vh',
@@ -39,6 +41,8 @@ const getThemes = () => {
       text: {
         primary: '#9e97c9',
       },
+      scrollbar: 'lightgray',
+      scrollThumb: 'darkgray',
     },
     measures: {
       headerMaxHeight: '6vh',
