@@ -29,18 +29,14 @@ const EnterNickname = () => {
   const classes = useStyles();
   const history = useHistory();
   const { authenticate } = useContext(AuthContext);
-  const { values, handleFormSubmit, handleFormChange, errors } = useForm(
-    openChat,
-    validate
-  );
 
-  function openChat() {
+  const { values, handleFormSubmit, handleFormChange, errors } = useForm(() => {
     authenticate();
     history.push({
       pathname: '/chat',
       state: values.nickname,
     });
-  }
+  }, validate);
 
   return (
     <form

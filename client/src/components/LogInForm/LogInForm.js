@@ -58,17 +58,13 @@ const useStyles = makeStyles((theme) => {
 const LogInForm = () => {
   const minWidth768 = useMediaQuery('(min-width:768px)');
   const classes = useStyles();
-  const { handleFormChange, handleFormSubmit, errors } = useForm(
-    onFormSubmit,
-    validate
-  );
   const [showPassword, setShowPassword] = useState(false);
   const { authenticate } = useContext(AuthContext);
   const history = useHistory();
 
-  function onFormSubmit() {
+  const { handleFormChange, handleFormSubmit, errors } = useForm(() => {
     console.log('Successfully logged in');
-  }
+  }, validate);
 
   const onEnterWithNoAccount = () => {
     authenticate();
