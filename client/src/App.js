@@ -7,7 +7,7 @@ import Header from './components/Header/Header';
 import LoginForm from './components/LogInForm/LogInForm';
 import Chat from './components/Chat/Chat';
 import NotFound from './components/NotFound/NotFound';
-import PrivateRoute from './hoc/PrivateRoute/PrivateRoute';
+import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import AuthProvider from './context/Auth';
 import EnterNickname from './components/EnterNickname/EnterNickname';
 
