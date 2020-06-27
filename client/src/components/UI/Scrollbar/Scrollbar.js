@@ -51,12 +51,12 @@ const Scrollbar = ({ children, ...props }) => {
   const [isDragging, setDragging] = useState(false);
 
   const handleMouseOver = useCallback(() => {
-    !hovering && setHovering(true);
-  }, [hovering]);
+    setHovering(true);
+  }, []);
 
   const handleMouseOut = useCallback(() => {
-    !!hovering && setHovering(false);
-  }, [hovering]);
+    setHovering(false);
+  }, []);
 
   const handleDocumentMouseUp = useCallback(
     (e) => {
@@ -132,6 +132,10 @@ const Scrollbar = ({ children, ...props }) => {
     };
   }, [handleScroll]);
 
+  /**
+   * Why document?
+   * Because while dragging you can move your mouse anywhere in the document, this is the default behaviour in all scroll-bar.
+   */
   useEffect(() => {
     document.addEventListener('mousemove', handleDocumentMouseMove);
     document.addEventListener('mouseup', handleDocumentMouseUp);
