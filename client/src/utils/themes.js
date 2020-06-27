@@ -5,6 +5,7 @@ const getThemes = () => {
     palette: {
       primary: {
         main: '#eeeeee',
+        dark: '#18191A',
       },
       secondary: {
         main: '#4ecca3',
@@ -31,6 +32,7 @@ const getThemes = () => {
     palette: {
       primary: {
         main: '#8fb8ed',
+        dark: 'lightgray',
       },
       secondary: {
         main: '#c2bbf0',
