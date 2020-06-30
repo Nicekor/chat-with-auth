@@ -42,13 +42,21 @@ const useStyles = makeStyles((theme) => {
 
 const SCROLL_BOX_MIN_HEIGHT = 20;
 
-const Scrollbar = ({ children, ...props }) => {
+const Scrollbar = ({ children, scrollToBottom, ...props }) => {
   const classes = useStyles();
   const [hovering, setHovering] = useState(false);
   const [scrollBoxHeight, setScrollBoxHeight] = useState(SCROLL_BOX_MIN_HEIGHT);
   const [scrollBoxTop, setScrollBoxTop] = useState(0);
   const [lastScrollThumbPosition, setScrollThumbPosition] = useState(0);
   const [isDragging, setDragging] = useState(false);
+  const scrollHostRef = useRef();
+  const messagesEndRef = useRef();
+
+  useEffect(() => {
+    if (scrollToBottom) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [scrollToBottom]);
 
   const handleMouseOver = useCallback(() => {
     setHovering(true);
@@ -115,8 +123,6 @@ const Scrollbar = ({ children, ...props }) => {
     setScrollBoxTop(newTop);
   }, [scrollBoxHeight]);
 
-  const scrollHostRef = useRef();
-
   useEffect(() => {
     const scrollHostElement = scrollHostRef.current;
     const { clientHeight, scrollHeight } = scrollHostElement;
@@ -155,6 +161,7 @@ const Scrollbar = ({ children, ...props }) => {
     >
       <div ref={scrollHostRef} className={classes.scrollhost} {...props}>
         {children}
+        {scrollToBottom && <div ref={messagesEndRef}></div>}
       </div>
       <div className={classes.scrollbar} style={{ opacity: hovering ? 1 : 0 }}>
         <div

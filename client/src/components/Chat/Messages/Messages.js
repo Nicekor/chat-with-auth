@@ -20,8 +20,7 @@ const Messages = () => {
 
   return (
     <Paper elevation={2} className={classes.messagesWrapper}>
-    {/* scrollbar should work from bottom to top */}
-      <Scrollbar>
+      <Scrollbar scrollToBottom>
         <List>
           {messages.map(({ id, message }) => {
             return <Message key={id} message={{ id, message }} />;
