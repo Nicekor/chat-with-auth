@@ -1,7 +1,7 @@
 import React from 'react';
 
-import sunIcon from '../../assets/img/sun-icon.png';
-import moonIcon from '../../assets/img/moon-icon.png';
+import Brightness5OutlinedIcon from '@material-ui/icons/Brightness5Outlined';
+import NightsStayOutlinedIcon from '@material-ui/icons/NightsStayOutlined';
 
 import { makeStyles, Switch, Box } from '@material-ui/core';
 
@@ -11,17 +11,7 @@ const useStyles = makeStyles((theme) => {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'flex-end',
-      maxHeight: theme.measures.headerMaxHeight,
-    },
-    sunIcon: {
-      width: '2em',
-    },
-    moonIcon: {
-      width: '3em',
-    },
-    themeSwitch: {
-      display: 'flex',
-      alignItems: 'center',
+      height: theme.measures.header.height,
     },
   };
 });
@@ -30,14 +20,14 @@ const Header = ({ darkMode, setDarkMode }) => {
   const classes = useStyles();
   return (
     <header className={classes.header}>
-      <Box className={classes.themeSwitch}>
-        <img src={sunIcon} alt="Sun Icon" className={classes.sunIcon} />
+      <Box display="flex" alignItems="center">
+        <Brightness5OutlinedIcon />
         <Switch
           color="primary"
           checked={darkMode}
           onChange={() => setDarkMode(!darkMode)}
         />
-        <img src={moonIcon} alt="Moon Icon" className={classes.moonIcon} />
+        <NightsStayOutlinedIcon />
       </Box>
     </header>
   );
