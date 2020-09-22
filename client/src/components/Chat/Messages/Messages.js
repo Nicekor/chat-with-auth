@@ -1,5 +1,5 @@
-import React from 'react';
-import { List, makeStyles, Paper } from '@material-ui/core';
+import React, { useState } from 'react';
+import { List, makeStyles } from '@material-ui/core';
 import Message from './Message/Message';
 import Scrollbar from '../../UI/Scrollbar/Scrollbar';
 import { messages } from '../../../utils/dummyData';
@@ -7,8 +7,7 @@ import { messages } from '../../../utils/dummyData';
 const useStyles = makeStyles((theme) => {
   return {
     messagesWrapper: {
-      width: '100%',
-      height: `calc(100vh - ${theme.measures.headerMaxHeight})`,
+      height: '88vh',
       overflow: 'auto',
       backgroundColor: theme.palette.background.default,
     },
@@ -17,17 +16,18 @@ const useStyles = makeStyles((theme) => {
 
 const Messages = () => {
   const classes = useStyles();
+  const [myMessages] = useState(messages);
 
   return (
-    <Paper elevation={2} className={classes.messagesWrapper}>
+    <div className={classes.messagesWrapper}>
       <Scrollbar scrollToBottom>
         <List>
-          {messages.map(({ id, message }) => {
+          {myMessages.map(({ id, message }) => {
             return <Message key={id} message={{ id, message }} />;
           })}
         </List>
       </Scrollbar>
-    </Paper>
+    </div>
   );
 };
 

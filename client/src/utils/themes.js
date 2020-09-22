@@ -1,6 +1,8 @@
-import { createMuiTheme } from '@material-ui/core/styles';
+import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
 
 const getThemes = () => {
+  const headerHeight = '5vh';
+
   const darkTheme = createMuiTheme({
     palette: {
       primary: {
@@ -25,7 +27,12 @@ const getThemes = () => {
       scrollThumb: '#1C1E21',
     },
     measures: {
-      headerMaxHeight: '6vh',
+      header: {
+        height: '6vh',
+      },
+      body: {
+        height: `calc(100vh - ${headerHeight})`,
+      },
     },
   });
   const lightTheme = createMuiTheme({
@@ -39,6 +46,7 @@ const getThemes = () => {
       },
       background: {
         default: '#f1e3f3',
+        paper: 'beige',
       },
       text: {
         primary: '#9e97c9',
@@ -47,11 +55,16 @@ const getThemes = () => {
       scrollThumb: 'darkgray',
     },
     measures: {
-      headerMaxHeight: '6vh',
+      header: {
+        height: '6vh',
+      },
+      body: {
+        height: `calc(100vh - ${headerHeight})`,
+      },
     },
   });
 
-  return [darkTheme, lightTheme];
+  return [responsiveFontSizes(darkTheme), responsiveFontSizes(lightTheme)];
 };
 
 export { getThemes };

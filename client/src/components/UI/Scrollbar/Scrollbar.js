@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core';
+import useWindowSize from '../../../hooks/useWindowSize';
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -51,6 +52,7 @@ const Scrollbar = ({ children, scrollToBottom, ...props }) => {
   const [isDragging, setDragging] = useState(false);
   const scrollHostRef = useRef();
   const messagesEndRef = useRef();
+  const [width, height] = useWindowSize();
 
   useEffect(() => {
     if (scrollToBottom) {
@@ -136,7 +138,7 @@ const Scrollbar = ({ children, scrollToBottom, ...props }) => {
     return () => {
       scrollHostElement.removeEventListener('scroll', handleScroll, true);
     };
-  }, [handleScroll]);
+  }, [handleScroll, width, height]);
 
   /**
    * Why document?

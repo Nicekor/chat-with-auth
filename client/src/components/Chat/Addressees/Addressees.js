@@ -8,9 +8,9 @@ const useStyles = makeStyles((theme) => {
   return {
     addresseesWrapper: {
       width: '50%',
-      height: `calc(100vh - ${theme.measures.headerMaxHeight})`,
       overflow: 'auto',
       backgroundColor: theme.palette.background.default,
+      marginRight: 2,
     },
     addresseesList: {
       margin: theme.spacing(0, 2),
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const Addressees = () => {
+const Addressees = ({ width }) => {
   const classes = useStyles();
   const [addresseeSelected, setAddresseeSelected] = useState(1);
 
@@ -32,7 +32,7 @@ const Addressees = () => {
   };
 
   return (
-    <Paper className={classes.addresseesWrapper}>
+    <Paper elevation={2} className={classes.addresseesWrapper}>
       <Scrollbar>
         <List className={classes.addresseesList}>
           {addressees.map(({ id, firstName, lastName, lastMessage }) => {
