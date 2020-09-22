@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) => {
   return {
     nicknameWrapper: {
       margin: 'auto',
+      paddingBottom: theme.measures.header.height,
       display: 'flex',
       flexDirection: 'column',
     },
