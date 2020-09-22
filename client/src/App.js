@@ -12,7 +12,7 @@ import AuthProvider from './context/Auth';
 import EnterNickname from './components/EnterNickname/EnterNickname';
 
 function App() {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
 
   const [darkTheme, lightTheme] = getThemes();
 
