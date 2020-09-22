@@ -7,14 +7,12 @@ import {
   Link,
   Button,
   makeStyles,
-  useMediaQuery,
   Typography,
   Box,
-  Divider,
   InputAdornment,
   IconButton,
 } from '@material-ui/core';
-import { AlternateEmail, Visibility, VisibilityOff } from '@material-ui/icons';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
 import useForm from '../../hooks/useForm';
 import validate from '../../validation/loginFormValidation';
 import { AuthContext } from '../../context/Auth';
@@ -32,16 +30,15 @@ const useStyles = makeStyles((theme) => {
       color: theme.palette.primary.main,
     },
     wrapper: {
-      display: 'flex',
       margin: 'auto',
+      paddingBottom: theme.measures.header.height,
+    },
+    logInForm: {
+      display: 'flex',
+      flexDirection: 'column',
       backgroundColor: theme.palette.background.paper,
       borderRadius: theme.spacing(2),
       padding: theme.spacing(2),
-    },
-    logInForm: {
-      margin: theme.spacing('auto', 2),
-      display: 'flex',
-      flexDirection: 'column',
     },
     formControl: {
       marginBottom: theme.spacing(2),
@@ -56,7 +53,6 @@ const useStyles = makeStyles((theme) => {
 });
 
 const LogInForm = () => {
-  const minWidth768 = useMediaQuery('(min-width:768px)');
   const classes = useStyles();
   const [showPassword, setShowPassword] = useState(false);
   const { authenticate } = useContext(AuthContext);
@@ -104,11 +100,6 @@ const LogInForm = () => {
             autoFocus
             aria-describedby="email-helper-text"
             className={classes.input}
-            endAdornment={
-              <InputAdornment position="end">
-                <AlternateEmail color="action" />
-              </InputAdornment>
-            }
           />
           <FormHelperText
             id="email-helper-text"
@@ -183,20 +174,6 @@ const LogInForm = () => {
           </Link>
         </FormHelperText>
       </form>
-      {minWidth768 && (
-        <>
-          <Divider orientation="vertical" flexItem />
-          <img
-            src="https://d26a57ydsghvgx.cloudfront.net/content/blog/BlogImage_Chat.jpg"
-            alt="Person chatting"
-            style={{
-              borderRadius: '1em',
-              width: '30em',
-              margin: '1em',
-            }}
-          />
-        </>
-      )}
     </Box>
   );
 };
