@@ -5,11 +5,12 @@ import { getThemes } from './utils/themes';
 
 import Header from './components/Header/Header';
 import LoginForm from './components/LogInForm/LogInForm';
-import Chat from './components/Chat/Chat';
+import Chats from './components/Chats/Chats';
 import NotFound from './components/NotFound/NotFound';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import AuthProvider from './context/Auth';
 import EnterNickname from './components/EnterNickname/EnterNickname';
+import Chat from './components/Chats/Chat/Chat';
 
 function App() {
   const [darkMode, setDarkMode] = useState(true);
@@ -20,16 +21,24 @@ function App() {
     <MuiThemeProvider theme={darkMode ? darkTheme : lightTheme}>
       <CssBaseline />
       <BrowserRouter>
-        <Header darkMode={darkMode} setDarkMode={setDarkMode} />
         <AuthProvider>
           <Switch>
-            <Route path="/" exact component={LoginForm} />
+            <Route path="/" exact>
+              <Header darkMode={darkMode} setDarkMode={setDarkMode} />
+              <LoginForm />
+            </Route>
             <PrivateRoute path="/nickname">
+              <Header darkMode={darkMode} setDarkMode={setDarkMode} />
               <EnterNickname />
             </PrivateRoute>
-            <PrivateRoute path="/chat">
-              <Chat />
-            </PrivateRoute>
+            <Route path="/chats" exact>
+              <Header darkMode={darkMode} setDarkMode={setDarkMode} />
+              <Chats />
+            </Route>
+            <Route path="/chat/:chatId" component={Chat} />
+            {/* <PrivateRoute path="/chats">
+              <Chats />
+            </PrivateRoute> */}
             <Route path="*" component={NotFound} />
           </Switch>
         </AuthProvider>
