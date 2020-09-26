@@ -7,6 +7,8 @@ import {
 } from '@material-ui/core';
 import { EditOutlined } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
+import { nanoid } from 'nanoid';
+
 import { AuthContext } from '../../context/Auth';
 import useForm from '../../hooks/useForm';
 import validate from '../../validation/nicknameValidation';
@@ -34,8 +36,11 @@ const EnterNickname = () => {
   const { values, handleFormSubmit, handleFormChange, errors } = useForm(() => {
     authenticate();
     history.push({
-      pathname: '/chat',
-      state: values.nickname,
+      pathname: '/chats',
+      state: {
+        userId: nanoid(),
+        userNickname: values.nickname,
+      },
     });
   }, validate);
 

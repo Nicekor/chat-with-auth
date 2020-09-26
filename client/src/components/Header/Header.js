@@ -10,7 +10,6 @@ const useStyles = makeStyles((theme) => {
     header: {
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'flex-end',
       height: theme.measures.header.height,
     },
   };
@@ -20,7 +19,7 @@ const Header = ({ darkMode, setDarkMode }) => {
   const classes = useStyles();
   return (
     <header className={classes.header}>
-      <Box display="flex" alignItems="center">
+      <Box display="flex" alignItems="center" marginLeft="auto">
         <Brightness5OutlinedIcon />
         <Switch
           color="primary"
