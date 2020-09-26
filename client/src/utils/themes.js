@@ -34,6 +34,9 @@ const getThemes = () => {
         height: `calc(100vh - ${headerHeight})`,
       },
     },
+    zIndex: {
+      appBar: 1,
+    },
   });
   const lightTheme = createMuiTheme({
     palette: {
@@ -61,6 +64,9 @@ const getThemes = () => {
       body: {
         height: `calc(100vh - ${headerHeight})`,
       },
+    },
+    zIndex: {
+      appBar: 1,
     },
   });
 
