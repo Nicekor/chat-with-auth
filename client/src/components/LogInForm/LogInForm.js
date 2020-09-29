@@ -1,34 +1,21 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useCallback } from 'react';
 import {
-  FormControl,
-  InputLabel,
-  Input,
   FormHelperText,
   Link,
   Button,
   makeStyles,
   Typography,
   Box,
-  InputAdornment,
-  IconButton,
 } from '@material-ui/core';
-import { Visibility, VisibilityOff } from '@material-ui/icons';
 import useForm from '../../hooks/useForm';
 import validate from '../../validation/loginFormValidation';
 import { AuthContext } from '../../context/Auth';
-import { useHistory } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
+import MyInput from '../UI/MyInput/MyInput';
+import PasswordInput from '../UI/PasswordInput/PasswordInput';
 
 const useStyles = makeStyles((theme) => {
   return {
-    input: {
-      color: theme.palette.text.primary,
-    },
-    inputLabel: {
-      color: theme.palette.primary.main,
-    },
-    formHelperText: {
-      color: theme.palette.primary.main,
-    },
     wrapper: {
       margin: 'auto',
       paddingBottom: theme.measures.header.height,
@@ -40,116 +27,104 @@ const useStyles = makeStyles((theme) => {
       borderRadius: theme.spacing(2),
       padding: theme.spacing(2),
     },
-    formControl: {
-      marginBottom: theme.spacing(2),
-    },
-    loginBtn: {
-      margin: theme.spacing(2, 0),
-    },
-    forgotPassword: {
-      alignSelf: 'flex-start',
+    formHelperText: {
+      color: theme.palette.text.primary,
     },
   };
 });
 
 const LogInForm = () => {
   const classes = useStyles();
-  const [showPassword, setShowPassword] = useState(false);
   const { authenticate } = useContext(AuthContext);
   const history = useHistory();
+  const [errors, setErrors] = useState({});
 
-  const { handleFormChange, handleFormSubmit, errors } = useForm(() => {
-    console.log('Successfully logged in');
-  }, validate);
+  const { values, handleFormChange, handleFormSubmit } = useForm(async () => {
+    try {
+      const { token, errors } = await loginUser(values);
+      if (errors) {
+        setErrors(errors);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  });
+
+  const loginUser = useCallback(async (userData) => {
+    try {
+      const res = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+      return res.json();
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
 
   const onEnterWithNoAccount = () => {
-    authenticate();
-    history.push('/nickname');
-  };
-
-  const handleMouseDownPassword = () => {
-    setShowPassword(!showPassword);
-  };
-  const handleClickShowPassword = (e) => {
-    e.preventDefault();
+    authenticate(() => {
+      history.push('/nickname');
+    });
   };
 
   return (
     <Box className={classes.wrapper}>
       <form
         onSubmit={handleFormSubmit}
+        onChange={handleFormChange}
         noValidate
         autoComplete="off"
         className={classes.logInForm}
         spellCheck={false}
       >
-        <FormControl
+        <MyInput
+          color="primary"
           required
           error={!!errors.email}
+          inputLabelProps={{
+            htmlFor: 'name',
+            children: 'Email address',
+          }}
+          inputProps={{
+            id: 'email',
+            type: 'email',
+            name: 'email',
+            'aria-describedby': 'email-helper-text',
+          }}
+          formHelperTextProps={{
+            id: 'email-helper-text',
+            children: errors.email || "We'll never share your email",
+          }}
+        />
+
+        <PasswordInput
           color="primary"
-          className={classes.formControl}
-        >
-          <InputLabel htmlFor="email" className={classes.inputLabel}>
-            Email address
-          </InputLabel>
-          <Input
-            id="email"
-            type="email"
-            name="email"
-            onChange={handleFormChange}
-            autoFocus
-            aria-describedby="email-helper-text"
-            className={classes.input}
-          />
-          <FormHelperText
-            id="email-helper-text"
-            className={classes.formHelperText}
-          >
-            {errors.email || "We'll never share your email."}
-          </FormHelperText>
-        </FormControl>
-        <FormControl
           required
           error={!!errors.password}
-          color="primary"
-          className={classes.formControl}
-        >
-          <InputLabel htmlFor="password" className={classes.inputLabel}>
-            Password
-          </InputLabel>
-          <Input
-            id="password"
-            type={showPassword ? 'text' : 'password'}
-            name="password"
-            onChange={handleFormChange}
-            aria-describedby="password-helper-text"
-            className={classes.input}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {showPassword ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
-              </InputAdornment>
-            }
-          />
-          <FormHelperText
-            id="password-helper-text"
-            className={classes.formHelperText}
-          >
-            {errors.password || "We'll never share your password."}
-          </FormHelperText>
-        </FormControl>
+          inputLabelProps={{
+            htmlFor: 'password',
+            children: 'Password',
+          }}
+          inputProps={{
+            id: 'password',
+            name: 'password',
+            'aria-describedby': 'password-helper-text',
+          }}
+          formHelperTextProps={{
+            id: 'password-helper-text',
+            children: errors.password || "We'll never share your password.",
+          }}
+        />
+
         <Link
           variant="body2"
-          component="button"
           color="textPrimary"
-          className={classes.forgotPassword}
-          type="button"
+          component={RouterLink}
+          to="forgot-password"
         >
           Forgot your password?
         </Link>
@@ -166,9 +141,9 @@ const LogInForm = () => {
           Need an account?{' '}
           <Link
             variant="caption"
-            component="button"
             color="textPrimary"
-            type="button"
+            component={RouterLink}
+            to="register"
           >
             Register
           </Link>
