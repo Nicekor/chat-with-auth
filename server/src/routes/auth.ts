@@ -1,9 +1,10 @@
 import { Request, Response, Router } from 'express';
-import { ValidationError, ValidationResult } from 'joi';
+import { ValidationResult } from 'joi';
 import User from '../models/User';
 import { loginValidation, registerValidation } from '../validation/validation';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import verifyToken from '../middlewares/verifyToken';
 
 const router = Router();
 
@@ -12,6 +13,10 @@ const router = Router();
 interface ErrorsJson {
   [key: string]: string;
 }
+
+router.post('/authenticate', verifyToken, (req, res) => {
+  res.json(res.locals.authData);
+});
 
 router.post(
   '/register',
@@ -28,9 +33,8 @@ router.post(
       );
       return res.status(400).json({ errors: errorsJson });
     }
-
     // check if the user is already in the database
-    const emailExist: User | undefined = await User.findOne(req.body.email);
+    const emailExist: User = await User.findOne(req.body.email);
     if (emailExist) {
       return res
         .status(400)
@@ -45,9 +49,14 @@ router.post(
     const user: User = new User(req.body.name, req.body.email, hashedPassword);
 
     try {
-      await user.save();
-      return res.json({ userId: user.id });
+      const savedUser: User = await user.save();
+      const token: string = jwt.sign(
+        { id: savedUser.user_id },
+        <string>process.env.TOKEN_SECRET
+      );
+      return res.json({ token });
     } catch (err) {
+      console.error(err);
       return res.status(400).send(err);
     }
   }
@@ -68,7 +77,7 @@ router.post(
       return res.status(400).json({ errors: errorsJson });
     }
 
-    const user: User | undefined = await User.findOne(req.body.email);
+    const user: User = await User.findOne(req.body.email);
     if (!user) {
       return res.status(400).json({
         errors: {
@@ -90,10 +99,10 @@ router.post(
 
     // create and assign a token
     const token: string = jwt.sign(
-      { id: user.id },
+      { id: user.user_id },
       <string>process.env.TOKEN_SECRET
     );
-    return res.header('auth-token', token).json({ token: token });
+    return res.json({ token });
   }
 );
 
