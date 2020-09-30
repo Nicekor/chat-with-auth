@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback } from 'react';
+import React, { useState } from 'react';
 import {
   FormHelperText,
   Link,
@@ -8,11 +8,10 @@ import {
   Box,
 } from '@material-ui/core';
 import useForm from '../../hooks/useForm';
-import validate from '../../validation/loginFormValidation';
-import { AuthContext } from '../../context/Auth';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import MyInput from '../UI/MyInput/MyInput';
 import PasswordInput from '../UI/PasswordInput/PasswordInput';
+import useAuth from '../../hooks/useAuth';
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -35,41 +34,25 @@ const useStyles = makeStyles((theme) => {
 
 const LogInForm = () => {
   const classes = useStyles();
-  const { authenticate } = useContext(AuthContext);
   const history = useHistory();
   const [errors, setErrors] = useState({});
+  const { loginUser, authenticate } = useAuth(() => {
+    history.replace('/chats');
+  });
 
   const { values, handleFormChange, handleFormSubmit } = useForm(async () => {
     try {
       const { token, errors } = await loginUser(values);
       if (errors) {
         setErrors(errors);
+      } else if (token) {
+        localStorage.setItem('token', token);
+        await authenticate();
       }
     } catch (err) {
       console.error(err);
     }
   });
-
-  const loginUser = useCallback(async (userData) => {
-    try {
-      const res = await fetch('http://localhost:5000/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      });
-      return res.json();
-    } catch (err) {
-      console.error(err);
-    }
-  }, []);
-
-  const onEnterWithNoAccount = () => {
-    authenticate(() => {
-      history.push('/nickname');
-    });
-  };
 
   return (
     <Box className={classes.wrapper}>
@@ -134,7 +117,7 @@ const LogInForm = () => {
         <Typography variant="body2" align="center" color="textPrimary">
           OR
         </Typography>
-        <Button color="primary" onClick={onEnterWithNoAccount}>
+        <Button color="primary" onClick={() => {}}>
           Enter without an account
         </Button>
         <FormHelperText className={classes.formHelperText}>
