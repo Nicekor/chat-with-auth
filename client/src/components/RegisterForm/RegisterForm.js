@@ -1,11 +1,11 @@
-import React, { useState, useContext, useCallback } from 'react';
+import React, { useState } from 'react';
 import { Button, makeStyles, Box } from '@material-ui/core';
 import useForm from '../../hooks/useForm';
-import { AuthContext } from '../../context/Auth';
 import { useHistory } from 'react-router-dom';
 
 import MyInput from '../UI/MyInput/MyInput';
 import PasswordInput from '../UI/PasswordInput/PasswordInput';
+import useAuth from '../../hooks/useAuth';
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -25,40 +25,26 @@ const useStyles = makeStyles((theme) => {
 
 const RegisterForm = () => {
   const classes = useStyles();
-  const { authenticate } = useContext(AuthContext);
   const history = useHistory();
   const [errors, setErrors] = useState({});
+  const { registerUser, authenticate } = useAuth(() => {
+    history.replace('/chats');
+  });
 
   const { values, handleFormChange, handleFormSubmit } = useForm(async () => {
     try {
-      const { userId, errors } = await registerUser(values);
+      const { token, errors } = await registerUser(values);
       if (errors) {
         setErrors(errors);
       }
-      if (userId) {
-        authenticate(userId, () => {
-          history.push('/chats');
-        });
+      if (token) {
+        localStorage.setItem('token', token);
+        await authenticate();
       }
     } catch (err) {
       console.error(err);
     }
   });
-
-  const registerUser = useCallback(async (userData) => {
-    try {
-      const res = await fetch('http://localhost:5000/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      });
-      return res.json();
-    } catch (err) {
-      console.error(err);
-    }
-  }, []);
 
   return (
     <Box className={classes.wrapper}>
