@@ -1,21 +1,22 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 
-const verifyToken = (req: Request, res: Response, next: NextFunction): void => {
-  const token: string | undefined = req.header('auth-token');
-  if (!token) {
-    res.status(401).send('Access Denied');
+const verifyToken = (req: Request, res: Response, next: NextFunction) => {
+  const bearerHeader: string | undefined = req.header('Authorization');
+  if (!bearerHeader) {
+    return res.sendStatus(403);
   }
+  const bearerToken: string | undefined = bearerHeader?.split(' ')[1];
 
   try {
-    const verified = jwt.verify(
-      <string>token,
+    const authData = jwt.verify(
+      <string>bearerToken,
       <string>process.env.TOKEN_SECRET
     );
-    res.json(verified);
+    res.locals.authData = authData;
     next();
   } catch (err) {
-    res.status(400).send('Invalid Token');
+    res.status(403).json({ msg: 'Token is not valid' });
   }
 };
 
