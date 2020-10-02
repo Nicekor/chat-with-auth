@@ -25,12 +25,13 @@ const MyInput = ({
   inputLabelProps,
   inputProps,
   formHelperTextProps,
+  className,
   ...props
 }) => {
   const classes = useStyles();
 
   return (
-    <FormControl {...props} className={classes.formControl}>
+    <FormControl {...props} className={[classes.formControl, className].join(' ')}>
       <InputLabel {...inputLabelProps} className={classes.inputLabel} />
       <Input {...inputProps} />
       <FormHelperText
