@@ -54,9 +54,9 @@ const useAuth = (authDoneCb) => {
       );
 
       if (res.ok) {
-        // const authData = await res.json();
+        const userData = await res.json();
         localStorage.setItem('isAuthenticated', true);
-        authDoneCb();
+        authDoneCb(userData);
       }
     } catch (err) {
       console.error(err);

@@ -36,8 +36,11 @@ const LogInForm = () => {
   const classes = useStyles();
   const history = useHistory();
   const [errors, setErrors] = useState({});
-  const { loginUser, authenticate } = useAuth(() => {
-    history.replace('/chats');
+  const { loginUser, authenticate } = useAuth((userData) => {
+    history.replace({
+      pathname: '/chats',
+      state: userData,
+    });
   });
 
   const { values, handleFormChange, handleFormSubmit } = useForm(async () => {
