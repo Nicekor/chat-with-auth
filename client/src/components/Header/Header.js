@@ -20,7 +20,6 @@ import {
 import useAuth from '../../hooks/useAuth';
 import { useHistory, useLocation } from 'react-router-dom';
 import AvatarWithLetter from '../UI/AvatarWithLetter/AvatarWithLetter';
-import AvatarUploader from '../UI/AvatarUploader/AvatarUploader';
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -97,7 +96,6 @@ const Header = ({ darkMode, setDarkMode }) => {
             </MenuItem>
             <MenuItem>
               <PhotoCamera className={classes.menuIcon} />
-              <AvatarUploader />
             </MenuItem>
             <MenuItem onClick={onLogOutClick}>
               <ExitToApp className={classes.menuIcon} />
