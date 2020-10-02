@@ -3,13 +3,21 @@ import pool from '../db/index';
 
 class User {
   user_id?: string;
-  name: string;
+  first_name: string;
+  last_name: string;
   email: string;
   password: string;
   created_at?: Date;
+  avatar_id?: number;
 
-  constructor(name: string, email: string, password: string) {
-    this.name = name;
+  constructor(
+    first_name: string,
+    last_name: string,
+    email: string,
+    password: string
+  ) {
+    this.first_name = first_name;
+    this.last_name = last_name;
     this.email = email;
     this.password = password;
   }
@@ -17,8 +25,8 @@ class User {
   async save(): Promise<User> {
     try {
       const res: QueryResult = await pool.query(
-        'INSERT INTO user_login (name, email, password) VALUES ($1, $2, $3) RETURNING *',
-        [this.name, this.email, this.password]
+        'INSERT INTO user_login (first_name, last_name, email, password) VALUES ($1, $2, $3, $4) RETURNING *',
+        [this.first_name, this.last_name, this.email, this.password]
       );
       return res.rows[0];
     } catch (err) {

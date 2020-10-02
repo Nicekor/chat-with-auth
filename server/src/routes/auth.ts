@@ -46,12 +46,17 @@ router.post(
     const hashedPassword: string = await bcrypt.hash(req.body.password, salt);
 
     // creates a user
-    const user: User = new User(req.body.name, req.body.email, hashedPassword);
+    const user: User = new User(
+      req.body.firstName,
+      req.body.lastName,
+      req.body.email,
+      hashedPassword
+    );
 
     try {
       const savedUser: User = await user.save();
       const token: string = jwt.sign(
-        { id: savedUser.user_id },
+        { userId: savedUser.user_id, firstName: savedUser.first_name },
         <string>process.env.TOKEN_SECRET
       );
       return res.json({ token });
@@ -99,7 +104,7 @@ router.post(
 
     // create and assign a token
     const token: string = jwt.sign(
-      { id: user.user_id },
+      { userId: user.user_id, firstName: user.first_name },
       <string>process.env.TOKEN_SECRET
     );
     return res.json({ token });

@@ -1,11 +1,12 @@
 import Joi, { object, ObjectSchema, options, ValidationResult } from 'joi';
 import User from '../models/User';
 
-// todo: check issue with the repeat password error message, have first name and last name as well instead of just name
+// todo: check issue with the repeat password error message
 
 export const registerValidation = (data: User): ValidationResult => {
   const schema: ObjectSchema = object({
-    name: Joi.string().alphanum().required().label('Name'),
+    firstName: Joi.string().alphanum().required().label('First Name'),
+    lastName: Joi.string().alphanum().required().label('Last Name'),
     email: Joi.string().required().email().label('Email address'),
     password: Joi.string().required().strict().min(6).label('Password'),
     repeatPassword: Joi.string()

@@ -27,8 +27,11 @@ const RegisterForm = () => {
   const classes = useStyles();
   const history = useHistory();
   const [errors, setErrors] = useState({});
-  const { registerUser, authenticate } = useAuth(() => {
-    history.replace('/chats');
+  const { registerUser, authenticate } = useAuth((userData) => {
+    history.replace({
+      pathname: '/chats',
+      state: userData,
+    });
   });
 
   const { values, handleFormChange, handleFormSubmit } = useForm(async () => {
@@ -59,21 +62,40 @@ const RegisterForm = () => {
         <MyInput
           color="primary"
           required
-          error={!!errors.name}
+          error={!!errors.firstName}
           inputLabelProps={{
-            htmlFor: 'name',
-            children: 'Name',
+            htmlFor: 'first-name',
+            children: 'First Name',
           }}
           inputProps={{
-            id: 'name',
+            id: 'first-name',
             type: 'text',
-            name: 'name',
+            name: 'firstName',
             autoFocus: true,
-            'aria-describedby': 'name-helper-text',
+            'aria-describedby': 'first-name-helper-text',
           }}
           formHelperTextProps={{
-            id: 'name-helper-text',
-            children: errors.name || "We'll never share your name",
+            id: 'first-name-helper-text',
+            children: errors.firstName || "We'll never share your name",
+          }}
+        />
+        <MyInput
+          color="primary"
+          required
+          error={!!errors.lastName}
+          inputLabelProps={{
+            htmlFor: 'last-name',
+            children: 'Last Name',
+          }}
+          inputProps={{
+            id: 'last-name',
+            type: 'text',
+            name: 'lastName',
+            'aria-describedby': 'last-name-helper-text',
+          }}
+          formHelperTextProps={{
+            id: 'last-name-helper-text',
+            children: errors.lastName || "We'll never share your name",
           }}
         />
         <MyInput
