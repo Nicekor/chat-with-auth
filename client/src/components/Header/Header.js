@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Brightness5Outlined,
+  ExitToApp,
   NightsStayOutlined,
   PersonAdd,
-  Settings,
+  PhotoCamera,
 } from '@material-ui/icons';
 import {
   makeStyles,
@@ -12,10 +13,14 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Typography,
+  Button,
 } from '@material-ui/core';
 
 import useAuth from '../../hooks/useAuth';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
+import AvatarWithLetter from '../UI/AvatarWithLetter/AvatarWithLetter';
+import AvatarUploader from '../UI/AvatarUploader/AvatarUploader';
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -25,6 +30,12 @@ const useStyles = makeStyles((theme) => {
       height: theme.measures.header.height,
       padding: theme.spacing(0, 2),
     },
+    myAvatar: {
+      marginLeft: theme.spacing(-1),
+    },
+    menuIcon: {
+      marginRight: theme.spacing(1),
+    },
   };
 });
 
@@ -33,6 +44,17 @@ const Header = ({ darkMode, setDarkMode }) => {
   const { isAuthenticated } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
   const history = useHistory();
+  const { state: userData } = useLocation();
+  const [userId, setUserId] = useState('');
+  const [firstName, setFirstName] = useState(null);
+  const [avatar, setAvatar] = useState(null);
+
+  useEffect(() => {
+    if (userData) {
+      setFirstName(userData.firstName);
+      setUserId(userData.userId);
+    }
+  }, [userData]);
 
   const onMenuClose = () => {
     setAnchorEl(null);
@@ -54,11 +76,14 @@ const Header = ({ darkMode, setDarkMode }) => {
             aria-haspopup="true"
             onClick={({ currentTarget }) => setAnchorEl(currentTarget)}
           >
-            <Settings />
+            <AvatarWithLetter
+              className={classes.myAvatar}
+              alt={firstName}
+              src={avatar}
+              personName={firstName}
+            />
           </IconButton>
-          <IconButton color="primary">
-            <PersonAdd />
-          </IconButton>
+          <Typography variant="h5">Chats</Typography>
           <Menu
             id="settings-menu"
             anchorEl={anchorEl}
@@ -66,7 +91,18 @@ const Header = ({ darkMode, setDarkMode }) => {
             open={Boolean(anchorEl)}
             onClose={onMenuClose}
           >
-            <MenuItem onClick={onLogOutClick}>Log Out</MenuItem>
+            <MenuItem onClick={() => {}}>
+              <PersonAdd className={classes.menuIcon} />
+              <Typography>Add Friend</Typography>
+            </MenuItem>
+            <MenuItem>
+              <PhotoCamera className={classes.menuIcon} />
+              <AvatarUploader />
+            </MenuItem>
+            <MenuItem onClick={onLogOutClick}>
+              <ExitToApp className={classes.menuIcon} />
+              <Typography>Log Out</Typography>
+            </MenuItem>
           </Menu>
         </>
       )}
