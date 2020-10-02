@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import {
   TextField,
   makeStyles,
@@ -9,9 +9,7 @@ import { EditOutlined } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
 import { nanoid } from 'nanoid';
 
-import { AuthContext } from '../../context/Auth';
 import useForm from '../../hooks/useForm';
-import validate from '../../validation/nicknameValidation';
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -31,10 +29,8 @@ const useStyles = makeStyles((theme) => {
 const EnterNickname = () => {
   const classes = useStyles();
   const history = useHistory();
-  const { authenticate } = useContext(AuthContext);
 
   const { values, handleFormSubmit, handleFormChange, errors } = useForm(() => {
-    authenticate();
     history.push({
       pathname: '/chats',
       state: {
@@ -42,7 +38,7 @@ const EnterNickname = () => {
         userNickname: values.nickname,
       },
     });
-  }, validate);
+  });
 
   return (
     <form
