@@ -9,14 +9,14 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
   const bearerToken: string | undefined = bearerHeader?.split(' ')[1];
 
   try {
-    const authData = jwt.verify(
+    const authData: string | object = jwt.verify(
       <string>bearerToken,
       <string>process.env.TOKEN_SECRET
     );
     res.locals.authData = authData;
     next();
   } catch (err) {
-    res.status(403).json({ msg: 'Token is not valid' });
+    res.sendStatus(403);
   }
 };
 
