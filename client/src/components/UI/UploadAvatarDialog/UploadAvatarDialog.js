@@ -2,7 +2,7 @@ import React from 'react';
 import { Dialog, DialogContent, DialogTitle } from '@material-ui/core';
 import AvatarUploader from './AvatarUploader/AvatarUploader';
 
-const UploadAvatarDialog = ({ open, handleClose, handleAvatarUploaded }) => {
+const UploadAvatarDialog = ({ open, handleClose }) => {
   return (
     <Dialog
       open={open}
@@ -14,7 +14,6 @@ const UploadAvatarDialog = ({ open, handleClose, handleAvatarUploaded }) => {
       <DialogContent dividers>
         <AvatarUploader
           handleClose={handleClose}
-          handleAvatarUploaded={handleAvatarUploaded}
         />
       </DialogContent>
     </Dialog>

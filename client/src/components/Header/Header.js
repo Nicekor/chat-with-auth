@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Brightness5Outlined,
   ExitToApp,
@@ -18,8 +18,9 @@ import {
 
 import useAuth from '../../hooks/useAuth';
 import { useHistory } from 'react-router-dom';
-import AvatarWithLetter from '../UI/AvatarWithLetter/AvatarWithLetter';
 import UploadAvatarDialog from '../UI/UploadAvatarDialog/UploadAvatarDialog';
+import UserAvatar from './UserAvatar/UserAvatar';
+import UserAvatarProvider from '../../context/UserAvatarProvider';
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -40,57 +41,7 @@ const Header = ({ darkMode, setDarkMode }) => {
   const { isAuthenticated } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
   const history = useHistory();
-  const [firstName, setFirstName] = useState(null);
-  const [avatar, setAvatar] = useState(null);
   const [openAvatarDialog, setOpenAvatarDialog] = useState(false);
-
-  const getUsername = useCallback(async () => {
-    try {
-      const res = await fetch(
-        'http://192.168.1.157:5000/api/user/name/firstName',
-        {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
-      const firstName = await res.json();
-      setFirstName(firstName);
-    } catch (err) {
-      console.error(err);
-    }
-  }, []);
-
-  const getAvatar = useCallback(async () => {
-    try {
-      const res = await fetch(
-        'http://192.168.1.157:5000/api/attachment/avatar',
-        {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
-      const avatarBlob = await res.blob();
-      setAvatar(URL.createObjectURL(avatarBlob));
-    } catch (err) {
-      console.error(err);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!firstName) {
-      getUsername();
-    }
-  }, [getUsername, firstName]);
-
-  useEffect(() => {
-    if (!avatar) {
-      getAvatar();
-    }
-  }, [getAvatar, avatar]);
 
   const onMenuClose = () => {
     setAnchorEl(null);
@@ -104,13 +55,6 @@ const Header = ({ darkMode, setDarkMode }) => {
     setOpenAvatarDialog(false);
   };
 
-  const onAvatarUploaded = useCallback((avatarBlob) => {
-    if (avatarBlob) {
-      setAvatar(URL.createObjectURL(avatarBlob));
-      setOpenAvatarDialog(false);
-    }
-  }, []);
-
   const onLogOutClick = () => {
     localStorage.removeItem('isAuthenticated');
     localStorage.removeItem('token');
@@ -120,7 +64,7 @@ const Header = ({ darkMode, setDarkMode }) => {
   return (
     <header className={classes.header}>
       {isAuthenticated && (
-        <>
+        <UserAvatarProvider>
           <IconButton
             color="primary"
             aria-controls="settings-menu"
@@ -128,11 +72,7 @@ const Header = ({ darkMode, setDarkMode }) => {
             edge="start"
             onClick={({ currentTarget }) => setAnchorEl(currentTarget)}
           >
-            <AvatarWithLetter
-              alt={firstName}
-              src={avatar}
-              personName={firstName}
-            />
+            <UserAvatar />
           </IconButton>
           <Typography variant="h5">Chats</Typography>
           <Menu
@@ -154,7 +94,6 @@ const Header = ({ darkMode, setDarkMode }) => {
             <UploadAvatarDialog
               open={openAvatarDialog}
               handleClose={onAvatarDialogClose}
-              handleAvatarUploaded={onAvatarUploaded}
             />
 
             <MenuItem onClick={onLogOutClick}>
@@ -162,7 +101,7 @@ const Header = ({ darkMode, setDarkMode }) => {
               <Typography>Log Out</Typography>
             </MenuItem>
           </Menu>
-        </>
+        </UserAvatarProvider>
       )}
       <Box display="flex" alignItems="center" marginLeft="auto">
         <Brightness5Outlined />

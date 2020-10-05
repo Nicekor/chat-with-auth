@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import AvatarEditor from 'react-avatar-editor';
 import {
   Backdrop,
@@ -11,6 +11,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { AddAPhoto, Cancel, Save, ZoomIn, ZoomOut } from '@material-ui/icons';
+import { UserAvatarContext } from '../../../../context/UserAvatarProvider';
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -41,7 +42,7 @@ const useStyles = makeStyles((theme) => {
 const canvasWidth = 160;
 const canvasHeight = 160;
 const maxSliderValue = 100;
-const AvatarUploader = ({ handleAvatarUploaded, handleClose }) => {
+const AvatarUploader = ({ handleClose }) => {
   const classes = useStyles();
   const [avatarFile, setAvatarFile] = useState(null);
   const [isSubmitting, setisSubmitting] = useState(false);
@@ -50,6 +51,7 @@ const AvatarUploader = ({ handleAvatarUploaded, handleClose }) => {
   const [zoom, setZoom] = useState(0);
   const [originalPicDimensions, setOriginalPicDimensions] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
+  const { setAvatar } = useContext(UserAvatarContext);
 
   const uploadAvatar = useCallback(async (data) => {
     try {
@@ -89,9 +91,10 @@ const AvatarUploader = ({ handleAvatarUploaded, handleClose }) => {
 
   useEffect(() => {
     if (avatarBlob) {
-      handleAvatarUploaded(avatarBlob);
+      setAvatar(URL.createObjectURL(avatarBlob));
+      handleClose();
     }
-  }, [avatarBlob, handleAvatarUploaded]);
+  }, [avatarBlob, setAvatar, handleClose]);
 
   const onFormSubmit = (e) => {
     e.preventDefault();
