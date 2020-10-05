@@ -34,11 +34,15 @@ router.post(
       return res.status(400).json({ errors: errorsJson });
     }
     // check if the user is already in the database
-    const emailExist: User = await User.findOne(req.body.email);
-    if (emailExist) {
-      return res
-        .status(400)
-        .json({ errors: { email: 'Email already exists' } });
+    try {
+      const emailExists: User | undefined = await User.findOne(req.body.email);
+      if (emailExists) {
+        return res
+          .status(400)
+          .json({ errors: { email: 'Email already exists' } });
+      }
+    } catch (err) {
+      console.error(err);
     }
 
     // hash the password
@@ -56,13 +60,13 @@ router.post(
     try {
       const savedUser: User = await user.save();
       const token: string = jwt.sign(
-        { userId: savedUser.user_id, firstName: savedUser.first_name },
+        { userId: savedUser.user_id },
         <string>process.env.TOKEN_SECRET
       );
       return res.json({ token });
     } catch (err) {
       console.error(err);
-      return res.status(400).send(err);
+      return res.sendStatus(400);
     }
   }
 );
@@ -82,7 +86,7 @@ router.post(
       return res.status(400).json({ errors: errorsJson });
     }
 
-    const user: User = await User.findOne(req.body.email);
+    const user: User | undefined = await User.findOne(req.body.email);
     if (!user) {
       return res.status(400).json({
         errors: {
@@ -102,12 +106,16 @@ router.post(
       });
     }
 
-    // create and assign a token
-    const token: string = jwt.sign(
-      { userId: user.user_id, firstName: user.first_name },
-      <string>process.env.TOKEN_SECRET
-    );
-    return res.json({ token });
+    try {
+      const token: string = jwt.sign(
+        { userId: user.user_id },
+        <string>process.env.TOKEN_SECRET
+      );
+      return res.json({ token });
+    } catch (err) {
+      console.error(err);
+      return res.sendStatus(400);
+    }
   }
 );
 
