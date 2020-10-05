@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   FormHelperText,
   Link,
@@ -36,12 +36,15 @@ const LogInForm = () => {
   const classes = useStyles();
   const history = useHistory();
   const [errors, setErrors] = useState({});
-  const { loginUser, authenticate } = useAuth((userData) => {
-    history.replace({
-      pathname: '/chats',
-      state: userData,
-    });
+  const { isAuthenticated, loginUser, authenticate } = useAuth((userData) => {
+    history.replace('/chats');
   });
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      history.push('/chats');
+    }
+  }, [isAuthenticated, history]);
 
   const { values, handleFormChange, handleFormSubmit } = useForm(async () => {
     try {
@@ -79,6 +82,7 @@ const LogInForm = () => {
             id: 'email',
             type: 'email',
             name: 'email',
+            autoFocus: true,
             'aria-describedby': 'email-helper-text',
           }}
           formHelperTextProps={{

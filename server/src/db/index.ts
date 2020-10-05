@@ -1,11 +1,13 @@
-import { Pool } from 'pg';
+import knex from 'knex';
 
-const pool: Pool = new Pool({
-  user: 'postgres',
-  password: 'postgresql',
-  host: 'localhost',
-  port: 5432,
-  database: 'chat_with_auth',
+const knexPg = knex({
+  client: 'pg',
+  connection: {
+    host: 'localhost',
+    user: 'postgres',
+    password: 'postgresql',
+    database: 'chat_with_auth',
+  },
 });
 
-export default pool;
+export default knexPg;

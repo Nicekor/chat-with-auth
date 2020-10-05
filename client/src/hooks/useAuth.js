@@ -1,15 +1,5 @@
-import { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-
 const useAuth = (authDoneCb) => {
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-  const history = useHistory();
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      history.replace('/chats');
-    }
-  }, [isAuthenticated, history]);
 
   const loginUser = async (userData) => {
     try {

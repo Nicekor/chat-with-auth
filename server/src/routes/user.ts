@@ -1,29 +1,27 @@
 import { Request, Response, Router } from 'express';
-import path from 'path';
-import multer from 'multer';
 import verifyToken from '../middlewares/verifyToken';
-
-const uploader = multer({
-  dest: path.join(__dirname, '../uploads'),
-  limits: {
-    fields: 10,
-    fileSize: 1024 * 1024 * 20,
-    files: 1,
-  },
-});
+import User from '../models/User';
 
 const router = Router();
 
-router.post(
-  '/avatar',
+router.get(
+  '/name/:nameSection?/',
   verifyToken,
-  uploader.single('avatarFile'),
-  (req: Request, res: Response) => {
+  async (req: Request, res: Response): Promise<Response<string>> => {
+    const userId: string = res.locals.authData.userId;
+    const reqFirstName: boolean = req.params.nameSection === 'firstName';
+    const reqLastName: boolean = req.params.nameSection === 'lastName';
     try {
-      console.log(req.file);
+      const userName: string = await User.getUserName(userId, {
+        firstName: reqFirstName,
+        lastName: reqLastName,
+        fullName: !reqFirstName && !reqLastName,
+      });
+
+      return res.json(userName);
     } catch (err) {
       console.error(err);
-      res.sendStatus(500);
+      return res.sendStatus(500);
     }
   }
 );

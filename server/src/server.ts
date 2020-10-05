@@ -5,6 +5,8 @@ import { config } from 'dotenv';
 import helmet from 'helmet';
 import cors from 'cors';
 import authRoute from './routes/auth';
+import userRoute from './routes/user';
+import attachmentRoute from './routes/attachment';
 
 const app: Application = express();
 const server: httpServer = http.createServer(app);
@@ -18,6 +20,8 @@ app.use(helmet());
 
 // routes
 app.use('/api/auth', authRoute);
+app.use('/api/user', userRoute);
+app.use('/api/attachment', attachmentRoute);
 
 socketIO.on('connection', (socket): void => {
   console.log('A user connected');
