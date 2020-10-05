@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, makeStyles, Box } from '@material-ui/core';
 import useForm from '../../hooks/useForm';
 import { useHistory } from 'react-router-dom';
@@ -27,12 +27,17 @@ const RegisterForm = () => {
   const classes = useStyles();
   const history = useHistory();
   const [errors, setErrors] = useState({});
-  const { registerUser, authenticate } = useAuth((userData) => {
-    history.replace({
-      pathname: '/chats',
-      state: userData,
-    });
-  });
+  const { isAuthenticated, registerUser, authenticate } = useAuth(
+    (userData) => {
+      history.replace('/chats');
+    }
+  );
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      history.push('/chats');
+    }
+  }, [isAuthenticated, history]);
 
   const { values, handleFormChange, handleFormSubmit } = useForm(async () => {
     try {
