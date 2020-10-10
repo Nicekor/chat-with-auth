@@ -19,6 +19,9 @@ const getThemes = () => {
       error: {
         main: '#e43f5a',
       },
+      success: {
+        main: '#3cb371',
+      },
       text: {
         primary: '#fff',
         secondary: '#eeeeee',
