@@ -39,7 +39,7 @@ class Attachment {
     }
   }
 
-  static async findOne(createdBy: string): Promise<Attachment | undefined> {
+  static async findOne(createdBy: string, attachmentType: string): Promise<Attachment | undefined> {
     try {
       const attachment: Attachment | undefined = await knexPg<Attachment>(
         'attachment'
@@ -47,7 +47,7 @@ class Attachment {
         .select('*')
         .where({
           created_by: createdBy,
-          attachment_type: 'avatar',
+          attachment_type: attachmentType,
         })
         .first();
       return attachment;
