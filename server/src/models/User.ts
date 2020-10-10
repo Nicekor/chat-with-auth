@@ -1,8 +1,10 @@
+import { nanoid } from 'nanoid';
 import knexPg from '../db/index';
 import { UserName, UserNameOptions } from '../interfaces/user.interface';
 
 class User {
   user_id?: string;
+  friend_tag?: string;
   first_name: string;
   last_name: string;
   email: string;
@@ -23,14 +25,14 @@ class User {
 
   async save(): Promise<User> {
     try {
-      const savedUserRows: User[] = await knexPg
+      const savedUserRows: User[] = await knexPg<User>('user_login')
         .insert({
+          friend_tag: nanoid(10),
           first_name: this.first_name,
           last_name: this.last_name,
           email: this.email,
           password: this.password,
         })
-        .into<User>('user_login')
         .returning('*');
       return savedUserRows[0];
     } catch (err) {
@@ -45,6 +47,20 @@ class User {
         .where({ email: newEmail })
         .first();
       return user;
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
+  static async getFriendTag(userId: string): Promise<string | undefined> {
+    try {
+      const user: Pick<User, 'friend_tag'> | undefined = await knexPg<User>(
+        'user_login'
+      )
+        .select('friend_tag')
+        .where({ user_id: userId })
+        .first();
+      return user?.friend_tag;
     } catch (err) {
       throw new Error(err);
     }
