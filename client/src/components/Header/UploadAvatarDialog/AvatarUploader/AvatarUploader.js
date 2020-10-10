@@ -11,7 +11,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { AddAPhoto, Cancel, Save, ZoomIn, ZoomOut } from '@material-ui/icons';
-import { UserAvatarContext } from '../../../../context/UserAvatarProvider';
+import { UserAvatarContext } from '../../../../context/UserAvatarCtx';
 
 const useStyles = makeStyles((theme) => {
   return {

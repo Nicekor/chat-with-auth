@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Avatar } from '@material-ui/core';
-import { UserAvatarContext } from '../../../context/UserAvatarProvider';
+import { UserAvatarContext } from '../../../context/UserAvatarCtx';
 
 const UserAvatar = () => {
   const { avatar, firstName } = useContext(UserAvatarContext);
