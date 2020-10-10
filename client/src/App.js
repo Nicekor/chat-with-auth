@@ -11,6 +11,7 @@ import NotFound from './components/NotFound/NotFound';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import EnterNickname from './components/EnterNickname/EnterNickname';
 import Chat from './components/Chats/Chat/Chat';
+import FriendRequests from './components/FriendRequests/FriendRequests';
 
 function App() {
   const [darkMode, setDarkMode] = useState(true);
@@ -39,6 +40,9 @@ function App() {
             <Chats />
           </PrivateRoute>
           <PrivateRoute path="/chat/:chatId" component={Chat} />
+          <PrivateRoute path="/friend-requests" exact>
+            <FriendRequests />
+          </PrivateRoute>
           <Route path="*" component={NotFound} />
         </Switch>
       </BrowserRouter>
