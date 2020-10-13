@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box } from '@material-ui/core';
-import AddresseesProvider from '../../context/Addressees';
+import AddresseesProvider from '../../context/AddresseesCtx';
 
 import SearchAddressee from './SearchAddressee/SearchAddressee';
 import Addressees from './Addressees/Addressees';
