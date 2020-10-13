@@ -121,12 +121,6 @@ const LogInForm = () => {
         <Button type="submit" color="primary">
           Login
         </Button>
-        <Typography variant="body2" align="center" color="textPrimary">
-          OR
-        </Typography>
-        <Button color="primary" onClick={() => {}}>
-          Enter without an account
-        </Button>
         <FormHelperText className={classes.formHelperText}>
           Need an account?{' '}
           <Link
