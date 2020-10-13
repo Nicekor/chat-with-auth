@@ -1,14 +1,12 @@
 import { Request, Response, Router } from 'express';
 import { ValidationResult } from 'joi';
-import User from '../models/User';
-import { loginValidation, registerValidation } from '../validation/validation';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import User from '../models/User';
+import { loginValidation, registerValidation } from '../validation/validation';
 import verifyToken from '../middlewares/verifyToken';
 
 const router = Router();
-
-// todo: polish this, some functions are repetitive, code is kinda ugly, could split into functions
 
 interface ErrorsJson {
   [key: string]: string;
