@@ -1,13 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
+  Avatar,
   ListItem,
   ListItemAvatar,
   ListItemText,
   makeStyles,
 } from '@material-ui/core';
-
-import { AddresseesContext } from '../../../../../context/Addressees';
-import AvatarWithLetter from '../../../../UI/AvatarWithLetter/AvatarWithLetter';
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -26,20 +24,18 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const Message = ({ id, message, seen, createdAt, addresseeIndex }) => {
+const Message = ({ addresseeState, author, message }) => {
   const classes = useStyles();
   const [isCurrentUser, setIsCurrentUser] = useState(false);
-  const { addressees } = useContext(AddresseesContext);
-  const addresseeName = [
-    addressees[addresseeIndex].firstName,
-    addressees[addresseeIndex].lastName,
-  ].join(' ');
+  const {
+    id: addresseeId,
+    name: addresseName,
+    avatar: addresseeAvatar,
+  } = addresseeState;
 
   useEffect(() => {
-    if (id === 21 || id === 15) {
-      setIsCurrentUser(true);
-    }
-  }, [id]);
+    setIsCurrentUser(author !== addresseeId);
+  }, [addresseeId, author]);
 
   return (
     <ListItem
@@ -50,11 +46,12 @@ const Message = ({ id, message, seen, createdAt, addresseeIndex }) => {
     >
       {!isCurrentUser && (
         <ListItemAvatar>
-          <AvatarWithLetter
-            alt={addresseeName}
-            src={addressees[addresseeIndex].avatar}
-            personName={addresseeName}
-          />
+          <Avatar
+            alt={addresseName + ' avatar'}
+            src={`http://192.168.1.157:5000/avatars/${addresseeAvatar}`}
+          >
+            {addresseName ? addresseName.charAt(0) : null}
+          </Avatar>
         </ListItemAvatar>
       )}
       <ListItemText secondary={message} />

@@ -1,29 +1,43 @@
-import React, { useEffect, useRef } from 'react';
-import { Box } from '@material-ui/core';
+import React, { useContext, useEffect } from 'react';
+import { Box, makeStyles } from '@material-ui/core';
 import { useLocation } from 'react-router-dom';
 
 import ChatBar from './ChatBar/ChatBar';
 import Messages from './Messages/Messages';
 import InputMessage from './InputMessage/InputMessage';
-import AddresseesProvider from '../../../context/Addressees';
+import { SocketContext } from '../../../context/SocketCtx';
 
-const Chat = ({ match }) => {
-  // const chatId = match.params.chatId;
-  const { state } = useLocation();
-  const { addresseeIndex } = state;
-  const messagesEndRef = useRef();
+const useStyles = makeStyles((theme) => {
+  return {
+    messagesWrapper: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'flex-end',
+      flex: 1,
+    },
+  };
+});
+
+const Chat = () => {
+  const classes = useStyles();
+  const { state: addresseeState } = useLocation();
+  const socket = useContext(SocketContext);
 
   useEffect(() => {
-    messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-  }, []);
+    socket.emit('joinRoom', addresseeState.id);
+
+    return () => {
+      socket.emit('leaveRoom', addresseeState.id);
+    };
+  }, [socket, addresseeState.id]);
 
   return (
-    <Box mx={2}>
-      <AddresseesProvider>
-        <ChatBar addresseeIndex={addresseeIndex} />
-        <Messages addresseeIndex={addresseeIndex} />
-      </AddresseesProvider>
-      <div ref={messagesEndRef}></div>
+    <Box mx={2} display="flex" flexDirection="column" flex={1}>
+      <ChatBar {...addresseeState} />
+      <Messages
+        className={classes.messagesWrapper}
+        addresseeState={addresseeState}
+      />
       <InputMessage />
     </Box>
   );

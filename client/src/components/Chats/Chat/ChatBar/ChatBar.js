@@ -1,10 +1,13 @@
-import React, { useContext } from 'react';
-import { Box, IconButton, makeStyles, Typography } from '@material-ui/core';
+import React from 'react';
+import {
+  Avatar,
+  Box,
+  IconButton,
+  makeStyles,
+  Typography,
+} from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import { AddresseesContext } from '../../../../context/Addressees';
-
-import AvatarWithLetter from '../../../UI/AvatarWithLetter/AvatarWithLetter';
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -19,13 +22,8 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const ChatBar = ({ addresseeIndex }) => {
+const ChatBar = ({ name, avatar }) => {
   const classes = useStyles();
-  const { addressees } = useContext(AddresseesContext);
-  const addresseeName = [
-    addressees[addresseeIndex].firstName,
-    addressees[addresseeIndex].lastName,
-  ].join(' ');
 
   return (
     <Box
@@ -44,14 +42,15 @@ const ChatBar = ({ addresseeIndex }) => {
       </RouterLink>
       <Box display="flex" alignItems="center">
         <Typography className={classes.addresseeName} noWrap>
-          {addresseeName}
+          {name}
         </Typography>
 
-        <AvatarWithLetter
-          alt={addresseeName}
-          src={addressees[addresseeIndex].avatar}
-          personName={addresseeName}
-        />
+        <Avatar
+          alt={name + ' avatar'}
+          src={`http://192.168.1.157:5000/avatars/${avatar}`}
+        >
+          {name ? name.charAt(0) : null}
+        </Avatar>
       </Box>
     </Box>
   );
