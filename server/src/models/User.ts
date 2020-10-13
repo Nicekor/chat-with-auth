@@ -1,3 +1,4 @@
+import Knex from 'knex';
 import { nanoid } from 'nanoid';
 import knexPg from '../db/index';
 import { UserName, UserNameOptions } from '../interfaces/user.interface';
@@ -40,11 +41,16 @@ class User {
     }
   }
 
-  static async findOne(newEmail: string): Promise<User | undefined> {
+  static async findOne(
+    newEmail?: string,
+    userId?: string
+  ): Promise<User | undefined> {
+    const whereClause: Readonly<Partial<Knex.MaybeRawRecord<User>>> = newEmail
+      ? { email: newEmail }
+      : { user_id: userId };
     try {
-      const user: User | undefined = await knexPg
-        .from<User>('user_login')
-        .where({ email: newEmail })
+      const user: User | undefined = await knexPg<User>('user_login')
+        .where(whereClause)
         .first();
       return user;
     } catch (err) {
