@@ -1,9 +1,12 @@
-import React, { useContext } from 'react';
-import { ListItemAvatar, ListItemText, makeStyles } from '@material-ui/core';
+import React from 'react';
+import {
+  Avatar,
+  ListItemAvatar,
+  ListItemText,
+  makeStyles,
+} from '@material-ui/core';
 
 import ListItemLink from '../../../UI/ListItemLink/ListItemLink';
-import AvatarWithLetter from '../../../UI/AvatarWithLetter/AvatarWithLetter';
-import { AddresseesContext } from '../../../../context/Addressees';
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -18,35 +21,33 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const Addressee = ({ id, addresseeIndex }) => {
+const Addressee = ({ id, name, avatar }) => {
   const classes = useStyles();
-  const { addressees } = useContext(AddresseesContext);
-  const addresseeName = [
-    addressees[addresseeIndex].firstName,
-    addressees[addresseeIndex].lastName,
-  ].join(' ');
 
   return (
     <ListItemLink
       to={{
         pathname: `/chat/${id}`,
         state: {
-          addresseeIndex,
+          id,
+          name,
+          avatar,
         },
       }}
       listItemProps={{ className: classes.addressee }}
     >
       <ListItemAvatar>
-        <AvatarWithLetter
-          alt={addresseeName}
-          src={addressees[addresseeIndex].avatar}
-          personName={addresseeName}
-        />
+        <Avatar
+          alt={name + ' avatar'}
+          src={`http://192.168.1.157:5000/avatars/${avatar}`}
+        >
+          {name ? name.charAt(0) : null}
+        </Avatar>
       </ListItemAvatar>
       <ListItemText
-        primary={addresseeName}
+        primary={name}
         primaryTypographyProps={{ noWrap: true }}
-        secondary={addressees[addresseeIndex].lastMessage}
+        secondary={'This will display the last message from the chat'}
         secondaryTypographyProps={{ noWrap: true }}
       />
       {/* <Box display="flex" flexDirection="column" alignItems="flex-end">
