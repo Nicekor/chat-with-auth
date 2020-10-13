@@ -9,9 +9,9 @@ import RegisterForm from './components/RegisterForm/RegisterForm';
 import Chats from './components/Chats/Chats';
 import NotFound from './components/NotFound/NotFound';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
-import EnterNickname from './components/EnterNickname/EnterNickname';
 import Chat from './components/Chats/Chat/Chat';
 import FriendRequests from './components/FriendRequests/FriendRequests';
+import SocketProvider from './context/SocketCtx';
 
 function App() {
   const [darkMode, setDarkMode] = useState(true);
@@ -31,17 +31,19 @@ function App() {
             <Header darkMode={darkMode} setDarkMode={setDarkMode} />
             <RegisterForm />
           </Route>
-          <Route path="/nickname" exact>
-            <Header darkMode={darkMode} setDarkMode={setDarkMode} />
-            <EnterNickname />
-          </Route>
-          <PrivateRoute path="/chats" exact>
-            <Header darkMode={darkMode} setDarkMode={setDarkMode} />
-            <Chats />
-          </PrivateRoute>
-          <PrivateRoute path="/chat/:chatId" component={Chat} />
           <PrivateRoute path="/friend-requests" exact>
             <FriendRequests />
+          </PrivateRoute>
+          <PrivateRoute path="/chats" exact>
+            <SocketProvider>
+              <Header darkMode={darkMode} setDarkMode={setDarkMode} />
+              <Chats />
+            </SocketProvider>
+          </PrivateRoute>
+          <PrivateRoute path="/chat/:chatId" exact>
+            <SocketProvider>
+              <Chat />
+            </SocketProvider>
           </PrivateRoute>
           <Route path="*" component={NotFound} />
         </Switch>
