@@ -14,6 +14,7 @@ const PrivateRoute = ({ children, ...props }) => {
               pathname: '/',
               state: { from: location },
             }}
+            exact
           />
         );
       }}
