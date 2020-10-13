@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Brightness5Outlined,
   ExitToApp,
@@ -46,6 +46,11 @@ const Header = ({ darkMode, setDarkMode }) => {
   const history = useHistory();
   const [openAvatarDialog, setOpenAvatarDialog] = useState(false);
   const [openAddFriendDialog, setOpenAddFriendDialog] = useState(false);
+  const topRef = useRef();
+
+  useEffect(() => {
+    topRef.current.scrollIntoView({ behavior: 'smooth' });
+  }, []);
 
   const onMenuClose = () => {
     setAnchorEl(null);
@@ -70,11 +75,11 @@ const Header = ({ darkMode, setDarkMode }) => {
   const onLogOutClick = () => {
     localStorage.removeItem('isAuthenticated');
     localStorage.removeItem('token');
-    history.replace('/');
+    history.push('/');
   };
 
   return (
-    <header className={classes.header}>
+    <header className={classes.header} ref={topRef}>
       {isAuthenticated && (
         <UserAvatarProvider>
           <Box display="flex" alignItems="center">
