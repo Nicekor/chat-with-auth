@@ -4,7 +4,6 @@ import {
   Link,
   Button,
   makeStyles,
-  Typography,
   Box,
 } from '@material-ui/core';
 import useForm from '../../hooks/useForm';
